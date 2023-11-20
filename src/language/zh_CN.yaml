@@ -1,0 +1,11 @@
+uuid:
+  error: "生成UUID错误"
+bcrypt:
+  error: "生成加密密码失败"
+  errPW: "密码错误，请输入正确密码"
+base64:
+  error: "base64解密错误"
+aes:
+  csError: "加密字符串错误！"
+  cliperError: "加密算法异常"
+  hexError: "加密数据解密异常"

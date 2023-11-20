@@ -1,12 +1,11 @@
 package main
 
 import (
-	auth "com.lh.auth/src"
+	router2 "com.lh.auth/src/router"
 	"com.lh.service/src/config/middleware"
 	"com.lh.service/src/config/yaml"
 	"com.lh.service/src/tools"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"os"
 	"strings"
 )
@@ -39,14 +38,7 @@ func main() {
 	router := gin.Default()
 	configs, _ := Config()
 	router.Use(middleware.MiddleWare(configs))
-	router.GET("/test", func(c *gin.Context) {
-		auth.Test()
-		c.String(http.StatusOK, "hello world!")
-	})
-	router.GET("/auth/code/test", func(c *gin.Context) {
-		auth.Test()
-		c.String(http.StatusOK, "hello world!")
-	})
+	router2.Router(router)
 	address := []string{configs.Host, configs.Port}
 	router.Run(strings.Join(address, ":"))
 }
