@@ -1,7 +1,7 @@
 package router
 
 import (
-	"com.lh.auth/src/crypto"
+	"com.lh.auth/crypto"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"

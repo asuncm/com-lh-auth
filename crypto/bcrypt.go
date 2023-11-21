@@ -1,7 +1,7 @@
 package crypto
 
 import (
-	"com.lh.service/src/config/yaml"
+	"com.lh.service/config/yaml"
 	"crypto/hmac"
 	"crypto/md5"
 	"encoding/base64"

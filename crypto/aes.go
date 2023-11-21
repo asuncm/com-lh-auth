@@ -2,7 +2,7 @@ package crypto
 
 import (
 	"bytes"
-	"com.lh.service/src/config/yaml"
+	"com.lh.service/config/yaml"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/hex"
@@ -11,7 +11,7 @@ import (
 
 type AesConf struct {
 	ID    string `json:"id"`
-	Key   string `json:"Key"`
+	Key   string `json:"Key"` // key支持16、24、32为加密数据
 	Value string `json:"value"`
 }
 
