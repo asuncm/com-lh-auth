@@ -1,7 +1,7 @@
 package crypto
 
 import (
-	"com.lh.service/config/yaml"
+	"com.lh.service/tools"
 	"crypto/hmac"
 	"crypto/md5"
 	"encoding/base64"
@@ -18,7 +18,7 @@ import (
 func Encrypt(p string, pathname string) (string, error) {
 	password, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
 	if err != nil {
-		config, _ := yaml.Language(pathname)
+		config, _ := tools.Language(pathname)
 		return "", errors.New(config["bcrypt"]["error"])
 	}
 	return string(password), err
@@ -28,7 +28,7 @@ func Encrypt(p string, pathname string) (string, error) {
 func Decrypt(p string, enP string, pathname string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(enP), []byte(p))
 	if err != nil {
-		config, _ := yaml.Language(pathname)
+		config, _ := tools.Language(pathname)
 		return errors.New(config["bcrypt"]["errPW"])
 	}
 	return err
@@ -39,7 +39,7 @@ func UUID(pathname string) (string, error) {
 	v4 := uuid.NewV4()
 	id, err := uuid.FromString(v4.String())
 	if err != nil {
-		config, _ := yaml.Language(pathname)
+		config, _ := tools.Language(pathname)
 		return "", errors.New(config["uuid"]["error"])
 	}
 	return id.String(), err
@@ -68,7 +68,7 @@ func EnBase(value string) string {
 func DeBase(value string, pathname string) (string, error) {
 	base, err := base64.StdEncoding.DecodeString(value)
 	if err != nil {
-		config, _ := yaml.Language(pathname)
+		config, _ := tools.Language(pathname)
 		return "", errors.New(config["base64"]["error"])
 	}
 	return string(base), err

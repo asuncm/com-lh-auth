@@ -2,7 +2,7 @@ package crypto
 
 import (
 	"bytes"
-	"com.lh.service/config/yaml"
+	"com.lh.service/tools"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/hex"
@@ -43,7 +43,7 @@ func AesEnCrypt(data AesConf, pathname string) (string, error) {
 
 	cData, err := aes.NewCipher(key)
 	if err != nil {
-		config, _ := yaml.Language(pathname)
+		config, _ := tools.Language(pathname)
 		return "", errors.New(config["aes"]["cliperError"])
 	}
 	cSize := cData.BlockSize()
@@ -61,7 +61,7 @@ func AesEnCrypt(data AesConf, pathname string) (string, error) {
 // 实现解密
 func AesDeCrypt(data AesConf, pathname string) (string, error) {
 	bytes, err := hex.DecodeString(data.Value)
-	config, _ := yaml.Language(pathname)
+	config, _ := tools.Language(pathname)
 	if err != nil {
 		return "", errors.New(config["aes"]["hexError"])
 	}

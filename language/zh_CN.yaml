@@ -9,3 +9,5 @@ aes:
   csError: "加密字符串错误！"
   cliperError: "加密算法异常"
   hexError: "加密数据解密异常"
+snowflake:
+  error: "workId生成异常"
