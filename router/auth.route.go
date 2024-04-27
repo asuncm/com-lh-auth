@@ -4,7 +4,6 @@ import (
 	"com.lh.auth/crypto"
 	"com.lh.service/badger"
 	"com.lh.service/tools"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -12,12 +11,10 @@ import (
 func AuthRoute(app *gin.RouterGroup) *gin.RouterGroup {
 	app.GET("/code/clientId", func(c *gin.Context) {
 		workId, _ := c.Get("WorkerID")
-		node, _ := crypto.NewWorker(int64(any(workId).(int8)), "")
-		id := node.GetId()
+		list, _ := crypto.ListId(int64(any(workId).(int8)), "")
 		pathname := tools.Pathname(c, "/")
-		badger.SetWithTTL(pathname, id, badger.DataConf{}, 30*60)
-		fmt.Println(30>>4, 30<<6)
-		c.JSON(http.StatusOK, tools.Code200(nil, id))
+		badger.SetWithTTL(pathname, any(list["id"]).(string), list, 30*60)
+		c.JSON(http.StatusOK, tools.Code200(nil, list["id"]))
 	})
 	return app
 }
