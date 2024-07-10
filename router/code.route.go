@@ -1,10 +1,16 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"com.lh.auth/src/code"
+	"github.com/gin-gonic/gin"
+)
 
 func CodeRoute(app *gin.RouterGroup) *gin.RouterGroup {
 	app.GET("/code", func(context *gin.Context) {
-
+		code.Code(context)
+	})
+	app.GET("/del", func(context *gin.Context) {
+		code.Del(context)
 	})
 	return app
 }

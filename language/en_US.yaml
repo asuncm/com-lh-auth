@@ -1,4 +1,0 @@
-uuid:
-  error: "Failed to generate a UUID"
-snowflake:
-  error: "workId生成异常"

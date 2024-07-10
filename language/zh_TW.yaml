@@ -1,4 +1,0 @@
-uuid:
-  error: "生成UUID錯誤"
-bcrypt:
-  error: "生成加密密碼失敗"
