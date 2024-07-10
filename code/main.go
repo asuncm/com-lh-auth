@@ -2,7 +2,7 @@ package code
 
 import (
 	"bytes"
-	"com.lh.auth/src/auth"
+	"com.lh.auth/auth"
 	"com.lh.basic/src/crypto"
 	data "com.lh.service/src/pebble"
 	"com.lh.service/src/tools"

@@ -1,7 +1,7 @@
 package router
 
 import (
-	"com.lh.auth/src/code"
+	"com.lh.auth/code"
 	"github.com/gin-gonic/gin"
 )
 
