@@ -3,7 +3,7 @@ package main
 import (
 	"com.lh.auth/locales"
 	router2 "com.lh.auth/router"
-	"com.lh.service/src/tools"
+	"com.lh.service/tools"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strings"
@@ -11,28 +11,28 @@ import (
 
 func Config() (tools.MiddleConf, error) {
 	platform := tools.Platform("")
-	pathname := tools.GetPath("LHPATH", fmt.Sprintf("%s%s%s", "config/", platform.Env, ".config.yaml"))
+	root := tools.GetPath("LHPATH", "")
+	pathname := fmt.Sprintf("%s%s%s%s", root, "/config/", platform.Env, ".config.yaml")
 	configs, err := tools.Yaml(pathname)
 	if err != nil {
 		return tools.MiddleConf{}, err
 	}
 	devServe := configs.Services["auth"]
-	root := configs.Root
-	database := fmt.Sprintf("%s%s", configs.Database, "/pebble")
+	database := tools.GetPath(configs.Database, "pebble/auth")
 	return tools.MiddleConf{
-		Platform:  platform.Platform,
-		Serve:     "auth",
-		Root:      root,
-		Host:      devServe.Host,
-		Port:      devServe.Port,
-		DataCache: database,
-		DataPort:  devServe.DataPort,
+		Platform: platform.Platform,
+		Serve:    fmt.Sprintf("%s%s", root, "/com.lh.auth"),
+		Root:     root,
+		Host:     devServe.Host,
+		Port:     devServe.Port,
+		DataDir:  database,
 	}, err
 }
 
 func main() {
 	router := gin.Default()
 	configs, _ := Config()
+	router.Use(tools.Cors())
 	router.Use(tools.MiddleWare(configs))
 	locales.Init()
 	router2.Router(router)

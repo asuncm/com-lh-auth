@@ -1,46 +1,36 @@
 package auth
 
 import (
-	"com.lh.basic/src/crypto"
-	data "com.lh.service/src/pebble"
-	"com.lh.service/src/tools"
-	"fmt"
+	"com.lh.basic/crypto"
+	data "com.lh.service/pebble"
+	"com.lh.service/tools"
 	"github.com/gin-gonic/gin"
-	"strconv"
 	"time"
 )
 
-type Code struct {
-	ID             string `json:"id"`
-	NowTime        int64  `json:"nowTime"`
-	ExpirationTime int64  `json:"expirationTime"`
-	Pd             string `json:"pd"`
-}
-
 func CodeID(c *gin.Context) {
-	paths := tools.Pathname(c, "/")
+	data_dir, _ := c.Get("DataDir")
 	nowTime := time.Now()
 	id, err := crypto.UUID(c)
 	if err != nil {
 		tools.Code500(err.Error(), c)
 	} else {
-		lists := Code{
-			ID:             id,
-			NowTime:        nowTime.UnixNano(),
-			ExpirationTime: nowTime.Add(time.Minute * 10).UnixNano(),
-		}
 		config := data.Config{
-			Path: paths.Path,
-			Option: data.Option{
-				ID:        strconv.FormatInt(lists.NowTime, 10),
-				Min:       10,
-				Key:       "uuid_log",
-				Prefix:    "uuid",
-				StartTime: nowTime.Format("200601021504"),
+			Path:     data_dir.(string),
+			Key:      "uuid",
+			Max:      100,
+			Duration: time.Minute * 10,
+			Data: data.MapData{
+				"uuid":           id,
+				"nowTime":        nowTime.UnixNano(),
+				"expirationTime": nowTime.Add(time.Minute * 10).UnixNano(),
 			},
 		}
-		err = data.Append(config, lists)
-		fmt.Println(config, err, "PPPPPP====")
-		tools.Code200(lists, c)
+		res, err := data.Append(config)
+		if err != nil {
+			tools.Code500(err.Error(), c)
+		} else {
+			tools.Code200(res.Data, c)
+		}
 	}
 }
