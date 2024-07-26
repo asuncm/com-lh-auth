@@ -7,7 +7,7 @@ import (
 
 func AuthRoute(app *gin.RouterGroup) *gin.RouterGroup {
 	app.GET("/code/clientId", func(c *gin.Context) {
-		auth.CodeID(c)
+		go auth.CodeID(c)
 	})
 	return app
 }
