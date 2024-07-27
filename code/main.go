@@ -1,15 +1,18 @@
 package code
 
 import (
+	config2 "com.lh.basic/config"
+	"com.lh.basic/crypto"
 	data "com.lh.service/pebble"
 	"com.lh.service/tools"
+	"com.lh.service/yugabyte"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 func GetCode(c *gin.Context) {
 	//data_dir, _ := c.Get("DataDir")
-	fmt.Println("data", "err", "--------------")
 	//config := data.Config{
 	//	Path: data_dir.(string),
 	//	Option: data.Option{
@@ -33,27 +36,44 @@ func GetCode(c *gin.Context) {
 		id   int16
 		name string
 	}
-	//pool, err := pgx.PoolDB("Allkic", "allkic")
-	//conn, err := pgx.OpenDB("Yugabyte", "pgx")
+	//pool, err := yugabyte.PoolDB("Allkic", "allkic")
+	//conn, err := yugabyte.OpenDB("Yugabyte", "yugabyte")
 	//fmt.Println(conn, err)
-	//opts := pgx.Config{
+	//opts := yugabyte.Config{
 	//	Name: "Allkic",
 	//	DB:   "allkic",
 	//	Key:  "allkic",
 	//}
-	fmt.Println("errrrrrrrrrrrrrrr=============", "boo")
-	tools.Code200(nil, c)
+	p := yugabyte.Ping(yugabyte.Config{
+		Name: "yugabyte",
+		DB:   "yugabyte",
+	})
+	fmt.Println(p, "lllpppp====")
+	defer tools.Code200("==========", c)
 }
 
 func Del(c *gin.Context) {
-	data_dir, _ := c.Get("DataDir")
-	fmt.Println("data", "err", "--------------")
-	config := data.Config{
-		Path: data_dir.(string),
+	data_dir := config2.Config.DataDir
+	nowTime := time.Now()
+	id, err := crypto.UUID(c)
+	if err != nil {
+
 	}
-	//db, _ := data.OpenDB(config.Path, config.Config)
-	////err := data.Delkey(db, "uuid_"+"1718871283211903300")
-	//db.Close()
-	fmt.Println("err", config)
-	tools.Code200(nil, c)
+	config := data.Config{
+		Path: fmt.Sprintf("%s/pebble/auth", data_dir),
+		Key:  "uuid",
+		DTSJ: nowTime.UnixNano(),
+		Data: data.DConf{
+			"uuid":           id,
+			"nowTime":        nowTime.UnixNano(),
+			"expirationTime": nowTime.Add(time.Minute * 10).UnixNano(),
+		},
+	}
+	d, _ := data.Add(config)
+	m, _ := data.AddLog(config)
+	fmt.Println(d, "err", config, "\n", m, "999999")
+	tools.Code200(map[string]interface{}{
+		"isBool": "p",
+		"sss":    "sssss",
+	}, c)
 }

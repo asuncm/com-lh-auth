@@ -1,27 +1,27 @@
 package auth
 
 import (
+	"com.lh.basic/config"
 	"com.lh.basic/crypto"
 	data "com.lh.service/pebble"
-	"com.lh.service/pgx"
 	"com.lh.service/tools"
+	"com.lh.service/yugabyte"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"time"
 )
 
 func CodeID(c *gin.Context) {
-	data_dir, _ := c.Get("DataDir")
+	data_dir := config.Config.DataDir
 	nowTime := time.Now()
 	id, err := crypto.UUID(c)
 	if err != nil {
 		tools.Code500(err.Error(), c)
 	} else {
-		config := data.Config{
-			Path:     data_dir.(string),
-			Key:      "uuid",
-			Max:      100,
-			Duration: time.Minute * 10,
+		conf := data.Config{
+			Path: fmt.Sprintf("%s/pebble/auth", data_dir),
+			Key:  "uuid",
+			DTSJ: nowTime.UnixNano(),
 			Data: data.DConf{
 				"uuid":           id,
 				"nowTime":        nowTime.UnixNano(),
@@ -29,8 +29,8 @@ func CodeID(c *gin.Context) {
 			},
 		}
 		//res, err := data.Append(config)
-		fmt.Println(config)
-		pgx.Ping(pgx.Config{
+		fmt.Println(data_dir, nowTime, id, conf)
+		yugabyte.Ping(yugabyte.Config{
 			Name: "yugabyte",
 			DB:   "allkic",
 		})

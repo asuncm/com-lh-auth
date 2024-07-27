@@ -6,11 +6,11 @@ import (
 )
 
 func CodeRoute(app *gin.RouterGroup) *gin.RouterGroup {
-	app.GET("/code", func(context *gin.Context) {
-		go code.GetCode(context)
+	go app.GET("/code", func(context *gin.Context) {
+		code.GetCode(context)
 	})
-	app.GET("/del", func(context *gin.Context) {
-		go code.Del(context)
+	go app.GET("/del", func(context *gin.Context) {
+		code.Del(context)
 	})
 	return app
 }
