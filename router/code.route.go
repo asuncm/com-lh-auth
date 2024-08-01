@@ -6,10 +6,10 @@ import (
 )
 
 func CodeRoute(app *gin.RouterGroup) *gin.RouterGroup {
-	go app.GET("/code", func(context *gin.Context) {
+	app.GET("/code", func(context *gin.Context) {
 		code.GetCode(context)
 	})
-	go app.GET("/del", func(context *gin.Context) {
+	app.GET("/del", func(context *gin.Context) {
 		code.Del(context)
 	})
 	return app

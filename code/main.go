@@ -1,14 +1,10 @@
 package code
 
 import (
-	config2 "com.lh.basic/config"
-	"com.lh.basic/crypto"
-	data "com.lh.service/pebble"
 	"com.lh.service/tools"
 	"com.lh.service/yugabyte"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"time"
 )
 
 func GetCode(c *gin.Context) {
@@ -53,25 +49,22 @@ func GetCode(c *gin.Context) {
 }
 
 func Del(c *gin.Context) {
-	data_dir := config2.Config.DataDir
-	nowTime := time.Now()
-	id, err := crypto.UUID(c)
-	if err != nil {
-
-	}
-	config := data.Config{
-		Path: fmt.Sprintf("%s/pebble/auth", data_dir),
-		Key:  "uuid",
-		DTSJ: nowTime.UnixNano(),
-		Data: data.DConf{
-			"uuid":           id,
-			"nowTime":        nowTime.UnixNano(),
-			"expirationTime": nowTime.Add(time.Minute * 10).UnixNano(),
-		},
-	}
-	d, _ := data.Add(config)
-	m, _ := data.AddLog(config)
-	fmt.Println(d, "err", config, "\n", m, "999999")
+	//data_dir := config2.Config.DataDir
+	//nowTime := time.Now()
+	//id, err := crypto.UUID(c)
+	//if err != nil {
+	//
+	//}
+	//config := data.Config{
+	//	Path: fmt.Sprintf("%s/pebble/auth", data_dir),
+	//	Key:  "uuid",
+	//	DTSJ: nowTime.UnixNano(),
+	//	Data: data.DConf{
+	//		"uuid":           id,
+	//		"nowTime":        nowTime.UnixNano(),
+	//		"expirationTime": nowTime.Add(time.Minute * 10).UnixNano(),
+	//	},
+	//}
 	tools.Code200(map[string]interface{}{
 		"isBool": "p",
 		"sss":    "sssss",
